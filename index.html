@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم مدیریت موجودی کفش</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230066FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'/%3E%3Ccircle cx='12' cy='7' r='4'/%3E%3C/svg%3E">
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading" class="loading-overlay">
+        <div class="spinner"></div>
+        <p>در حال بارگذاری...</p>
+    </div>
+
+    <!-- Main Application -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="header-title">
+                    <svg class="header-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    سیستم مدیریت موجودی کفش
+                </h1>
+                <div class="header-actions">
+                    <button id="exportBtn" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10,9 9,9 8,9"/>
+                        </svg>
+                        خروجی گرفتن
+                    </button>
+                    <button id="importBtn" class="btn btn-secondary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                            <polyline points="14,2 14,8 20,8"/>
+                            <line x1="16" y1="13" x2="8" y2="13"/>
+                            <line x1="16" y1="17" x2="8" y2="17"/>
+                            <polyline points="10,9 9,9 8,9"/>
+                        </svg>
+                        وارد کردن
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="#dashboard" class="nav-link active" data-section="dashboard">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                            </svg>
+                            داشبورد
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#inventory" class="nav-link" data-section="inventory">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                <line x1="3" y1="6" x2="21" y2="6"/>
+                                <path d="M16 10a4 4 0 0 1-8 0"/>
+                            </svg>
+                            مدیریت موجودی
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#entry" class="nav-link" data-section="entry">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            ثبت ورود
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#sales" class="nav-link" data-section="sales">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="1" x2="12" y2="23"/>
+                                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                            </svg>
+                            ثبت فروش
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#reports" class="nav-link" data-section="reports">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+                            </svg>
+                            گزارش‌ها
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active">
+                    <div class="section-header">
+                        <h2>داشبورد</h2>
+                        <p>خلاصه‌ای از وضعیت موجودی و فروش</p>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-icon primary">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                    <line x1="3" y1="6" x2="21" y2="6"/>
+                                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3>کل محصولات</h3>
+                                <div class="card-value" id="totalProducts">0</div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-icon success">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3>فروش امروز</h3>
+                                <div class="card-value" id="todaySales">0</div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-icon warning">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                    <line x1="12" y1="9" x2="12" y2="13"/>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3>موجودی کم</h3>
+                                <div class="card-value warning" id="lowStock">0</div>
+                            </div>
+                        </div>
+
+                        <div class="dashboard-card">
+                            <div class="card-icon info">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                            </div>
+                            <div class="card-content">
+                                <h3>فروش ماه</h3>
+                                <div class="card-value" id="monthlySales">0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="recent-activities">
+                        <h3>فعالیت‌های اخیر</h3>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                        <line x1="3" y1="6" x2="21" y2="6"/>
+                                    </svg>
+                                </div>
+                                <div class="activity-content">
+                                    <p>سیستم آماده استفاده است</p>
+                                    <small>امروز</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Inventory Section -->
+                <section id="inventory" class="content-section">
+                    <div class="section-header">
+                        <h2>مدیریت موجودی</h2>
+                        <div class="header-actions">
+                            <button class="btn btn-primary" onclick="openAddProductModal()">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                افزودن محصول
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filters-section">
+                        <div class="search-box">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/>
+                                <path d="m21 21-4.35-4.35"/>
+                            </svg>
+                            <input type="text" id="searchProducts" placeholder="جستجو در محصولات...">
+                        </div>
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-filter="all">همه</button>
+                            <button class="filter-btn" data-filter="low">موجودی کم</button>
+                            <button class="filter-btn" data-filter="out">تمام شده</button>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>نام محصول</th>
+                                    <th>موجودی فعلی</th>
+                                    <th>موجودی اولیه</th>
+                                    <th>فروش کل</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTable">
+                                <!-- Inventory items will be populated by JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Entry Section -->
+                <section id="entry" class="content-section">
+                    <div class="section-header">
+                        <h2>ثبت ورود</h2>
+                        <p>افزودن موجودی محصولات موجود</p>
+                    </div>
+
+                    <div class="sales-form-container">
+                        <form class="sales-form" id="entryForm">
+                            <div class="form-group">
+                                <label for="entryProductSelect">انتخاب محصول</label>
+                                <select id="entryProductSelect">
+                                    <option value="">محصول را انتخاب کنید</option>
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="entryQuantity">تعداد</label>
+                                    <input type="number" id="entryQuantity" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="entryPrice">قیمت واحد (ریال)</label>
+                                    <input type="number" id="entryPrice" min="0">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="entryDate">تاریخ ورود</label>
+                                <input type="date" id="entryDate">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="entryNotes">توضیحات (اختیاری)</label>
+                                <textarea id="entryNotes" rows="3" placeholder="توضیحات اضافی..."></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    ثبت ورود
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="clearEntryForm()">
+                                    پاک کردن
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="recent-sales">
+                        <h3>ورودهای اخیر</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>تاریخ</th>
+                                        <th>محصول</th>
+                                        <th>تعداد</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="entryTable">
+                                    <!-- Entry records will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Sales Section -->
+                <section id="sales" class="content-section">
+                    <div class="section-header">
+                        <h2>ثبت فروش</h2>
+                    </div>
+
+                    <div class="sales-form-container">
+                        <div class="sales-tabs">
+                            <button class="tab-btn active" data-store="151">مغازه 151</button>
+                            <button class="tab-btn" data-store="168">مغازه 168</button>
+                        </div>
+
+                        <form class="sales-form" id="salesForm">
+                            <div class="form-group">
+                                <label for="productSelect">انتخاب محصول</label>
+                                <select id="productSelect" required>
+                                    <option value="">محصول را انتخاب کنید</option>
+                                </select>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="quantity">تعداد</label>
+                                    <input type="number" id="quantity" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="price">قیمت واحد (ریال)</label>
+                                    <input type="number" id="price" min="0" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="saleDate">تاریخ فروش</label>
+                                <input type="date" id="saleDate" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="notes">توضیحات (اختیاری)</label>
+                                <textarea id="notes" rows="3" placeholder="توضیحات اضافی..."></textarea>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="submit" class="btn btn-primary">
+                                    ثبت فروش
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="clearSalesForm()">
+                                    پاک کردن
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="recent-sales">
+                        <h3>فروش‌های اخیر</h3>
+                        <div class="table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>تاریخ</th>
+                                        <th>محصول</th>
+                                        <th>مغازه</th>
+                                        <th>تعداد</th>
+                                        <th>عملیات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesTable">
+                                    <!-- Sales records will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="content-section">
+                    <div class="section-header">
+                        <h2>گزارش‌ها و آمار</h2>
+                    </div>
+
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <h3>گزارش فروش روزانه</h3>
+                            <div class="report-filters">
+                                <input type="date" id="dailyReportDate" value="">
+                                <button class="btn btn-primary" onclick="generateDailyReport()">تولید گزارش</button>
+                            </div>
+                            <div class="report-result" id="dailyReportResult">
+                                <p>تاریخ را انتخاب کنید</p>
+                            </div>
+                        </div>
+
+                        <div class="report-card">
+                            <h3>گزارش فروش ماهانه</h3>
+                            <div class="report-filters">
+                                <select id="monthlyReportMonth">
+                                    <option value="">ماه را انتخاب کنید</option>
+                                </select>
+                                <select id="monthlyReportYear">
+                                    <option value="">سال را انتخاب کنید</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="generateMonthlyReport()">تولید گزارش</button>
+                            </div>
+                            <div class="report-result" id="monthlyReportResult">
+                                <p>ماه و سال را انتخاب کنید</p>
+                            </div>
+                        </div>
+
+                        <div class="report-card">
+                            <h3>عملکرد محصولات</h3>
+                            <div class="report-filters">
+                                <select id="productReportPeriod">
+                                    <option value="7">۷ روز گذشته</option>
+                                    <option value="30">۳۰ روز گذشته</option>
+                                    <option value="90">۹۰ روز گذشته</option>
+                                </select>
+                                <button class="btn btn-primary" onclick="generateProductReport()">تولید گزارش</button>
+                            </div>
+                            <div class="report-result" id="productReportResult">
+                                <!-- Product performance data will be shown here -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div id="addProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>افزودن محصول جدید</h3>
+                <button class="modal-close" onclick="closeAddProductModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="addProductForm">
+                <div class="form-group">
+                    <label for="productName">نام محصول</label>
+                    <input type="text" id="productName" required>
+                </div>
+                <div class="form-group">
+                    <label for="initialQuantity">موجودی اولیه</label>
+                    <input type="number" id="initialQuantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="productCategory">دسته‌بندی</label>
+                    <select id="productCategory">
+                        <option value="کفش ورزشی">کفش ورزشی</option>
+                        <option value="کفش رسمی">کفش رسمی</option>
+                        <option value="کفش روزمره">کفش روزمره</option>
+                        <option value="کفش تابستانی">کفش تابستانی</option>
+                        <option value="کفش زمستانی">کفش زمستانی</option>
+                        <option value="سایر">سایر</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">افزودن</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeAddProductModal()">انصراف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div id="editProductModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>ویرایش محصول</h3>
+                <button class="modal-close" onclick="closeEditProductModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="editProductForm">
+                <input type="hidden" id="editProductId">
+                <div class="form-group">
+                    <label for="editProductName">نام محصول</label>
+                    <input type="text" id="editProductName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editCurrentQuantity">موجودی فعلی</label>
+                    <input type="number" id="editCurrentQuantity" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="editProductCategory">دسته‌بندی</label>
+                    <select id="editProductCategory">
+                        <option value="کفش ورزشی">کفش ورزشی</option>
+                        <option value="کفش رسمی">کفش رسمی</option>
+                        <option value="کفش روزمره">کفش روزمره</option>
+                        <option value="کفش تابستانی">کفش تابستانی</option>
+                        <option value="کفش زمستانی">کفش زمستانی</option>
+                        <option value="سایر">سایر</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">ذخیره</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditProductModal()">انصراف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <div class="notification-content">
+            <span id="notificationMessage"></span>
+            <button class="notification-close" onclick="hideNotification()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Import Modal -->
+    <div id="importModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>وارد کردن داده‌ها</h3>
+                <button class="modal-close" onclick="closeImportModal()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="import-content">
+                <div class="form-group">
+                    <label for="importFile">انتخاب فایل اکسل</label>
+                    <input type="file" id="importFile" accept=".xlsx,.xls" onchange="handleFileImport(event)">
+                </div>
+                <div class="import-info">
+                    <h4>نحوه وارد کردن داده‌ها:</h4>
+                    <ol>
+                        <li>فایل اکسل خود را آماده کنید</li>
+                        <li>ستون اول: نام محصول</li>
+                        <li>ستون دوم: موجودی</li>
+                        <li>ستون سوم: دسته‌بندی</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="test_entry_debug.js"></script>
+    <script src="detailed_debug.js"></script>
+</body>
+</html>

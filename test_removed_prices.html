@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تست حذف قیمت‌ها</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; direction: rtl; }
+        .test { background: #f0f8ff; padding: 15px; margin: 10px 0; border-radius: 8px; }
+        .success { background: #e8f5e8; color: #2d5a2d; }
+        .info { background: #fff3cd; color: #856404; }
+    </style>
+</head>
+<body>
+    <h1>✅ تست حذف قیمت‌ها از سیستم</h1>
+    
+    <div class="test success">
+        <h3>🔴 قیمت‌های حذف شده:</h3>
+        <ul>
+            <li>فیلد قیمت واحد در فرم ثبت ورود</li>
+            <li>فیلد قیمت واحد در فرم ثبت فروش</li>
+            <li>ستون قیمت واحد در جدول ورودها</li>
+            <li>ستون قیمت واحد در جدول فروش‌ها</li>
+            <li>ستون مبلغ کل در جدول ورودها</li>
+            <li>ستون مبلغ کل در جدول فروش‌ها</li>
+            <li>محاسبات قیمت در گزارش‌ها</li>
+            <li>تابع formatPrice()</li>
+        </ul>
+    </div>
+
+    <div class="test info">
+        <h3>📋 فیلدهای باقی‌مانده:</h3>
+        <ul>
+            <li>✅ انتخاب محصول</li>
+            <li>✅ تعداد</li>
+            <li>✅ تاریخ</li>
+            <li>✅ توضیحات (اختیاری)</li>
+        </ul>
+    </div>
+
+    <div class="test success">
+        <h3>🎯 نتیجه:</h3>
+        <p>سیستم حالا فقط بر پایه <strong>تعداد</strong> کار می‌کند و قیمت‌ها کاملاً حذف شده‌اند.</p>
+    </div>
+</body>
+</html>

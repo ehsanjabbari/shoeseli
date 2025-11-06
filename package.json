@@ -1,0 +1,31 @@
+{
+  "name": "shoe-inventory-management",
+  "version": "1.0.0",
+  "description": "سیستم مدیریت موجودی کفش - Persian Shoe Store Inventory Management System",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "serve": "npx serve ."
+  },
+  "keywords": [
+    "inventory",
+    "persian", 
+    "farsi",
+    "shoe",
+    "store",
+    "management",
+    "فارسی",
+    "موجودی",
+    "کفش"
+  ],
+  "author": "MiniMax Agent",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/shoe-inventory-management.git"
+  },
+  "homepage": "https://yourusername.github.io/shoe-inventory-management",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}
