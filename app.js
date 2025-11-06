@@ -40,11 +40,11 @@ class InventoryApp {
         } else {
             // Initialize with sample data based on Excel file
             this.products = [
-                { id: 1, name: 'فندی رضا', category: 'کفش ورزشی', initialQuantity: 3, currentStock: 3, totalSold: 0, createdAt: new Date().toISOString() },
-                { id: 2, name: 'هوتیک سه سگک رضا', category: 'کفش ورزشی', initialQuantity: 6, currentStock: 6, totalSold: 0, createdAt: new Date().toISOString() },
-                { id: 3, name: 'هرمس تخت رضا', category: 'کفش رسمی', initialQuantity: 8, currentStock: 8, totalSold: 0, createdAt: new Date().toISOString() },
-                { id: 4, name: 'زارا جلو بسته رضا', category: 'کفش روزمره', initialQuantity: 7, currentStock: 7, totalSold: 0, createdAt: new Date().toISOString() },
-                { id: 5, name: 'دو سگک ویزون رضا', category: 'کفش تابستانی', initialQuantity: 1, currentStock: 1, totalSold: 0, createdAt: new Date().toISOString() }
+                { id: 1, name: 'فندی رضا', category: 'کفش ورزشی', initialQuantity: 3, currentStock: 3, totalSold: 0, createdAt: this.getCurrentPersianDateISO() },
+                { id: 2, name: 'هوتیک سه سگک رضا', category: 'کفش ورزشی', initialQuantity: 6, currentStock: 6, totalSold: 0, createdAt: this.getCurrentPersianDateISO() },
+                { id: 3, name: 'هرمس تخت رضا', category: 'کفش رسمی', initialQuantity: 8, currentStock: 8, totalSold: 0, createdAt: this.getCurrentPersianDateISO() },
+                { id: 4, name: 'زارا جلو بسته رضا', category: 'کفش روزمره', initialQuantity: 7, currentStock: 7, totalSold: 0, createdAt: this.getCurrentPersianDateISO() },
+                { id: 5, name: 'دو سگک ویزون رضا', category: 'کفش تابستانی', initialQuantity: 1, currentStock: 1, totalSold: 0, createdAt: this.getCurrentPersianDateISO() }
             ];
             console.log('Initialized products with sample data');
             this.saveData();
@@ -462,7 +462,7 @@ class InventoryApp {
             productId,
             storeId: this.currentStore,
             quantity,
-            saleDate: saleDate || new Date().toISOString().split('T')[0],
+            saleDate: saleDate || this.getCurrentPersianDateISO(),
             notes,
             createdAt: new Date().toISOString()
         };
@@ -532,7 +532,7 @@ class InventoryApp {
                 id: Date.now(),
                 productId,
                 quantity,
-                entryDate: entryDate || new Date().toISOString().split('T')[0],
+                entryDate: entryDate || this.getCurrentPersianDateISO(),
                 notes,
                 createdAt: new Date().toISOString()
             };
@@ -606,11 +606,122 @@ class InventoryApp {
         }).join('');
     }
 
-    // Utility Functions
+    // Persian Date Functions
     formatDate(dateString) {
         if (!dateString) return '';
         const date = new Date(dateString);
-        return date.toLocaleDateString('fa-IR');
+        return this.gregorianToPersian(date);
+    }
+
+    gregorianToPersian(date) {
+        const d = new Date(date);
+        const gregorian = {
+            year: d.getFullYear(),
+            month: d.getMonth() + 1,
+            day: d.getDate()
+        };
+
+        // تبدیل میلادی به شمسی
+        let persian = this.convertToPersian(gregorian.year, gregorian.month, gregorian.day);
+        
+        // تبدیل اعداد به فارسی
+        const persianYear = this.convertToPersianNumbers(persian.year.toString());
+        const persianMonth = this.convertToPersianNumbers(persian.month.toString().padStart(2, '0'));
+        const persianDay = this.convertToPersianNumbers(persian.day.toString().padStart(2, '0'));
+        
+        return `${persianYear}/${persianMonth}/${persianDay}`;
+    }
+
+    convertToPersian(gregorianYear, gregorianMonth, gregorianDay) {
+        // الگوریتم تبدیل میلادی به شمسی
+        const persianMonths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+        const leapMonths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30];
+        
+        // محاسبه سال شمسی
+        let persianYear = gregorianYear - 622;
+        let startDate = new Date(gregorianYear, 0, 1);
+        let endDate = new Date(gregorianYear, 11, 31);
+        let daysPassed = Math.floor((startDate.getTime() - new Date(1978, 2, 21).getTime()) / (1000 * 60 * 60 * 24));
+        
+        // تنظیم تقریبی
+        if (daysPassed > 78) {
+            persianYear++;
+            daysPassed -= 365;
+        }
+        
+        // محاسبه ماه و روز
+        let remainingDays = daysPassed;
+        let persianMonth = 1;
+        let isLeapYear = this.isLeapYear(persianYear);
+        const months = isLeapYear ? leapMonths : persianMonths;
+        
+        for (let i = 0; i < 12; i++) {
+            if (remainingDays < months[i]) {
+                persianMonth = i + 1;
+                break;
+            }
+            remainingDays -= months[i];
+        }
+        
+        const persianDay = remainingDays + 1;
+        
+        return { year: persianYear, month: persianMonth, day: persianDay };
+    }
+
+    isLeapYear(year) {
+        // بررسی سال کبیسه شمسی
+        return ((year - 1394) % 4 === 0) || ((year - 1394) % 4 === 3 && (year - 1394) % 100 === 1);
+    }
+
+    convertToPersianNumbers(englishNumber) {
+        const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        return englishNumber.replace(/[0-9]/g, (match) => {
+            return persianNumbers[parseInt(match)];
+        });
+    }
+
+    getCurrentPersianDate() {
+        // تاریخ امروز به شمسی
+        const today = new Date();
+        return this.gregorianToPersian(today);
+    }
+
+    getCurrentPersianDateISO() {
+        // تاریخ امروز به فرمت YYYY/MM/DD شمسی
+        const today = new Date();
+        const persian = this.convertToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+        return `${persian.year}/${String(persian.month).padStart(2, '0')}/${String(persian.day).padStart(2, '0')}`;
+    }
+
+    calculateDaysDifference(date1, date2) {
+        // محاسبه اختلاف روزها بین دو تاریخ شمسی
+        const year1 = date1.year;
+        const year2 = date2.year;
+        const month1 = date1.month;
+        const month2 = date2.month;
+        const day1 = date1.day;
+        const day2 = date2.day;
+        
+        // تبدیل به روزهای کل
+        const totalDays1 = year1 * 365 + (year1 - 1) / 4 + this.getDaysInMonths(date1.year, date1.month) + date1.day;
+        const totalDays2 = year2 * 365 + (year2 - 1) / 4 + this.getDaysInMonths(date2.year, date2.month) + date2.day;
+        
+        return Math.abs(totalDays1 - totalDays2);
+    }
+
+    getDaysInMonths(year, month) {
+        // محاسبه مجموع روزهای ماه‌های قبل از ماه جاری
+        const persianMonths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+        const leapMonths = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 30];
+        
+        const isLeap = this.isLeapYear(year);
+        const months = isLeap ? leapMonths : persianMonths;
+        
+        let totalDays = 0;
+        for (let i = 0; i < month - 1; i++) {
+            totalDays += months[i];
+        }
+        return totalDays;
     }
 
 
@@ -652,7 +763,7 @@ class InventoryApp {
         let html = '';
         recentSales.forEach(sale => {
             const product = this.products.find(p => p.id === sale.productId);
-            const date = new Date(sale.saleDate).toLocaleDateString('fa-IR');
+            const date = this.formatDate(sale.saleDate);
             html += `
                 <tr>
                     <td>${date}</td>
@@ -718,7 +829,7 @@ class InventoryApp {
 
         let totalQuantity = 0;
         let html = '<div style="text-align: right;">';
-        html += `<h4>گزارش فروش روزانه - ${new Date(selectedDate).toLocaleDateString('fa-IR')}</h4>`;
+        html += `<h4>گزارش فروش روزانه - ${this.formatDate(selectedDate)}</h4>`;
         html += '<table style="width: 100%; border-collapse: collapse; margin-top: 16px;">';
         html += '<tr style="background-color: #f3f4f6;"><th style="padding: 8px; text-align: right;">محصول</th><th style="padding: 8px; text-align: right;">مغازه</th><th style="padding: 8px; text-align: right;">تعداد</th></tr>';
 
@@ -745,8 +856,8 @@ class InventoryApp {
         }
 
         const monthSales = this.sales.filter(sale => {
-            const saleDate = new Date(sale.saleDate);
-            return saleDate.getMonth() + 1 == month && saleDate.getFullYear() == year;
+            const saleDate = this.convertToPersian(new Date(sale.saleDate).getFullYear(), new Date(sale.saleDate).getMonth() + 1, new Date(sale.saleDate).getDate());
+            return saleDate.month == month && saleDate.year == year;
         });
 
         if (monthSales.length === 0) {
@@ -777,7 +888,7 @@ class InventoryApp {
 
         Object.keys(dailyStats).forEach(date => {
             const stats = dailyStats[date];
-            html += `<tr><td style="padding: 8px;">${new Date(date).toLocaleDateString('fa-IR')}</td><td style="padding: 8px;">${Array.from(stats.stores).join(', ')}</td><td style="padding: 8px;">${stats.count}</td></tr>`;
+            html += `<tr><td style="padding: 8px;">${this.formatDate(date)}</td><td style="padding: 8px;">${Array.from(stats.stores).join(', ')}</td><td style="padding: 8px;">${stats.count}</td></tr>`;
         });
 
         html += `<tr style="font-weight: bold; background-color: #e6f0ff;"><td colspan="2" style="padding: 8px;">مجموع:</td><td style="padding: 8px;">${totalQuantity}</td></tr>`;
@@ -790,13 +901,14 @@ class InventoryApp {
         const period = parseInt(document.getElementById('productReportPeriod').value);
         const resultDiv = document.getElementById('productReportResult');
         
-        const endDate = new Date();
-        const startDate = new Date();
-        startDate.setDate(endDate.getDate() - period);
-
+        // فیلتر بر اساس تاریخ شمسی
+        const currentPersianDate = this.getCurrentPersianDate();
         const periodSales = this.sales.filter(sale => {
-            const saleDate = new Date(sale.saleDate);
-            return saleDate >= startDate && saleDate <= endDate;
+            const saleDate = this.convertToPersian(new Date(sale.saleDate).getFullYear(), new Date(sale.saleDate).getMonth() + 1, new Date(sale.saleDate).getDate());
+            
+            // محاسبه تفاوت تاریخ‌ها (فقط تقریبی برای روزها)
+            const daysDiff = this.calculateDaysDifference(saleDate, currentPersianDate);
+            return daysDiff <= period && daysDiff >= 0;
         });
 
         const productStats = {};
@@ -869,61 +981,52 @@ class InventoryApp {
     }
 
     setupDateInputs() {
-        const today = new Date().toISOString().split('T')[0];
-        const dateInput = document.getElementById('saleDate');
-        if (dateInput) {
-            dateInput.value = today;
+        // تنظیم تاریخ پیش‌فرض شمسی برای فرم‌ها
+        const todayPersian = this.getCurrentPersianDateISO();
+        
+        // تاریخ فروش
+        const saleDateInput = document.getElementById('saleDate');
+        if (saleDateInput) {
+            saleDateInput.value = todayPersian;
         }
-
+        
+        // تاریخ ورود
         const entryDateInput = document.getElementById('entryDate');
         if (entryDateInput) {
-            entryDateInput.value = today;
+            entryDateInput.value = todayPersian;
         }
-
-        const dailyReportDate = document.getElementById('dailyReportDate');
-        if (dailyReportDate) {
-            dailyReportDate.value = today;
-        }
-
-        // Setup month and year selects for monthly report
-        const monthSelect = document.getElementById('monthlyReportMonth');
-        const yearSelect = document.getElementById('monthlyReportYear');
         
-        if (monthSelect) {
-            const months = [
-                'فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور',
-                'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'
-            ];
-            months.forEach((month, index) => {
-                const option = document.createElement('option');
-                option.value = index + 1;
-                option.textContent = month;
-                monthSelect.appendChild(option);
-            });
+        // تاریخ گزارش روزانه
+        const dailyReportInput = document.getElementById('dailyReportDate');
+        if (dailyReportInput) {
+            dailyReportInput.value = todayPersian;
         }
-
-        if (yearSelect) {
-            const currentYear = new Date().getFullYear();
-            for (let year = currentYear + 1; year >= currentYear - 5; year--) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                yearSelect.appendChild(option);
-            }
+        
+        // تاریخ گزارش ماهانه - تنظیم ماه و سال جاری شمسی
+        const monthlyReportMonth = document.getElementById('monthlyReportMonth');
+        const monthlyReportYear = document.getElementById('monthlyReportYear');
+        
+        if (monthlyReportMonth && monthlyReportYear) {
+            const currentPersianDate = this.getCurrentPersianDate();
+            
+            // تنظیم ماه جاری
+            monthlyReportMonth.value = currentPersianDate.month.toString();
+            
+            // تنظیم سال جاری
+            monthlyReportYear.value = currentPersianDate.year.toString();
         }
     }
 
     getTodaySales() {
-        const today = new Date().toISOString().split('T')[0];
+        const today = this.getCurrentPersianDateISO();
         return this.sales.filter(sale => sale.saleDate === today);
     }
 
     getMonthlySales() {
-        const currentMonth = new Date().getMonth();
-        const currentYear = new Date().getFullYear();
+        const currentPersianDate = this.getCurrentPersianDate();
         return this.sales.filter(sale => {
-            const saleDate = new Date(sale.saleDate);
-            return saleDate.getMonth() === currentMonth && saleDate.getFullYear() === currentYear;
+            const saleDate = this.convertToPersian(new Date(sale.saleDate).getFullYear(), new Date(sale.saleDate).getMonth() + 1, new Date(sale.saleDate).getDate());
+            return saleDate.month === currentPersianDate.month && saleDate.year === currentPersianDate.year;
         });
     }
 
@@ -932,8 +1035,8 @@ class InventoryApp {
         const data = {
             products: this.products,
             sales: this.sales,
-            exportDate: new Date().toISOString(),
-            version: '1.0'
+            exportDate: this.getCurrentPersianDateISO(),
+            version: '1.1' // نسخه جدید با تاریخ شمسی
         };
 
         const dataStr = JSON.stringify(data, null, 2);
@@ -941,7 +1044,7 @@ class InventoryApp {
         
         const link = document.createElement('a');
         link.href = URL.createObjectURL(dataBlob);
-        link.download = `inventory_backup_${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `inventory_backup_${this.getCurrentPersianDateISO()}.json`;
         link.click();
         
         this.showNotification('اطلاعات با موفقیت خارج شد', 'success');
