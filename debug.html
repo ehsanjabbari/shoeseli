@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Debug Test</title>
+</head>
+<body>
+    <div id="loading">در حال بارگذاری...</div>
+    <div id="app" style="display:none;">
+        <h1>وب اپلیکیشن بارگذاری شد!</h1>
+    </div>
+
+    <script>
+        console.log('JavaScript started');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            setTimeout(function() {
+                console.log('Hiding loading...');
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                console.log('App should be visible now');
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

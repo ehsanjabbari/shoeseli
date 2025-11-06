@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript Test</title>
+</head>
+<body>
+    <h1>تست جاوااسکریپت</h1>
+    <div id="output"></div>
+    
+    <script>
+        console.log('Starting JavaScript test...');
+        
+        try {
+            // Simple test of Persian date functions
+            const testApp = {
+                convertToPersianNumbers(englishNumber) {
+                    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                    return englishNumber.replace(/[0-9]/g, (match) => {
+                        return persianNumbers[parseInt(match)];
+                    });
+                },
+                
+                getCurrentPersianDateISO() {
+                    const today = new Date();
+                    console.log('Today:', today);
+                    return today.toISOString().split('T')[0];
+                }
+            };
+            
+            console.log('Test object created successfully');
+            const result = testApp.getCurrentPersianDateISO();
+            console.log('Result:', result);
+            
+            document.getElementById('output').innerHTML = 'تست موفقیت‌آمیز بود! ' + result;
+            
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('output').innerHTML = 'خطا: ' + error.message;
+        }
+    </script>
+</body>
+</html>

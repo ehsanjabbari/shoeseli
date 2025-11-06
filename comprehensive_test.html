@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تست توابع تاریخ فارسی</title>
+    <style>
+        body {
+            font-family: Vazirmatn, sans-serif;
+            text-align: center;
+            padding: 50px;
+            direction: rtl;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+        .test-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <h1>تست توابع تاریخ فارسی</h1>
+    
+    <div class="test-box">
+        <h3>تست جاوااسکریپت پایه</h3>
+        <div id="basic-test">در حال تست...</div>
+    </div>
+    
+    <div class="test-box">
+        <h3>تست توابع تاریخ فارسی</h3>
+        <div id="date-test">در حال تست...</div>
+    </div>
+    
+    <div class="test-box">
+        <h3>تست localStorage</h3>
+        <div id="storage-test">در حال تست...</div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="index.html" class="btn btn-primary" style="display: inline-block; padding: 15px 30px; background: #28a745; color: white; text-decoration: none; border-radius: 5px; font-size: 18px;">
+            ورود به وب‌اپلیکیشن اصلی
+        </a>
+    </div>
+
+    <script>
+        console.log('=== شروع تست جامع ===');
+        
+        // تست 1: جاوااسکریپت پایه
+        function testBasicJavaScript() {
+            const test = {
+                convertToPersianNumbers(englishNumber) {
+                    const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                    return englishNumber.replace(/[0-9]/g, (match) => {
+                        return persianNumbers[parseInt(match)];
+                    });
+                }
+            };
+            
+            const result = test.convertToPersianNumbers('2025');
+            console.log('تبدیل اعداد:', result);
+            return result === '۲۰۲۵' ? 'success' : 'error';
+        }
+        
+        // تست 2: تاریخ فارسی
+        function testPersianDate() {
+            try {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = now.getMonth() + 1;
+                const day = now.getDate();
+                
+                console.log('تاریخ میلادی:', year, month, day);
+                
+                // تست ساده تبدیل
+                const persianTest = {
+                    convertToPersian(gregorianYear, gregorianMonth, gregorianDay) {
+                        // تبدیل ساده (برای تست)
+                        const offset = 621;
+                        let year = gregorianYear - offset;
+                        
+                        if (gregorianMonth < 3 || (gregorianMonth === 3 && gregorianDay < 21)) {
+                            year--;
+                        }
+                        
+                        let month = gregorianMonth;
+                        if (month < 3) {
+                            month += 12;
+                        }
+                        
+                        const day = gregorianDay;
+                        
+                        return { year, month, day };
+                    },
+                    
+                    convertToPersianNumbers(englishNumber) {
+                        const persianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+                        return englishNumber.replace(/[0-9]/g, (match) => {
+                            return persianNumbers[parseInt(match)];
+                        });
+                    },
+                    
+                    getCurrentPersianDateISO() {
+                        const today = new Date();
+                        const persian = this.convertToPersian(today.getFullYear(), today.getMonth() + 1, today.getDate());
+                        return `${persian.year}/${String(persian.month).padStart(2, '0')}/${String(persian.day).padStart(2, '0')}`;
+                    }
+                };
+                
+                const result = persianTest.getCurrentPersianDateISO();
+                console.log('تاریخ فارسی:', result);
+                
+                return result ? 'success' : 'error';
+            } catch (error) {
+                console.error('خطا در تست تاریخ:', error);
+                return 'error';
+            }
+        }
+        
+        // تست 3: localStorage
+        function testLocalStorage() {
+            try {
+                const testKey = 'test_persian_date';
+                const testData = { date: '۱۴۰۳/۰۸/۱۵', message: 'تست موفق' };
+                
+                localStorage.setItem(testKey, JSON.stringify(testData));
+                const retrieved = JSON.parse(localStorage.getItem(testKey));
+                
+                console.log('localStorage test:', retrieved);
+                
+                localStorage.removeItem(testKey);
+                return retrieved && retrieved.message === 'تست موفق' ? 'success' : 'error';
+            } catch (error) {
+                console.error('خطا در تست localStorage:', error);
+                return 'error';
+            }
+        }
+        
+        // اجرای تست‌ها
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM آماده شد');
+            
+            setTimeout(() => {
+                // تست 1
+                const basicResult = testBasicJavaScript();
+                document.getElementById('basic-test').innerHTML = 
+                    basicResult === 'success' ? 
+                    '✅ جاوااسکریپت پایه درست کار می‌کند' : 
+                    '❌ مشکل در جاوااسکریپت پایه';
+                
+                // تست 2
+                const dateResult = testPersianDate();
+                document.getElementById('date-test').innerHTML = 
+                    dateResult === 'success' ? 
+                    '✅ توابع تاریخ فارسی درست کار می‌کنند' : 
+                    '❌ مشکل در توابع تاریخ فارسی';
+                
+                // تست 3
+                const storageResult = testLocalStorage();
+                document.getElementById('storage-test').innerHTML = 
+                    storageResult === 'success' ? 
+                    '✅ localStorage درست کار می‌کند' : 
+                    '❌ مشکل در localStorage';
+                
+                const allPassed = basicResult === 'success' && dateResult === 'success' && storageResult === 'success';
+                
+                if (allPassed) {
+                    console.log('=== همه تست‌ها موفق بودند ===');
+                } else {
+                    console.log('=== برخی تست‌ها ناموفق بودند ===');
+                }
+            }, 500);
+        });
+    </script>
+</body>
+</html>

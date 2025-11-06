@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تست وب‌اپ</title>
+    <style>
+        body {
+            font-family: Vazirmatn, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .success { color: green; }
+        .error { color: red; }
+        .info { color: blue; }
+    </style>
+</head>
+<body>
+    <h1 class="info">وب‌اپلیکیشن مدیریت موجودی کفش</h1>
+    <p>اگر این صفحه را می‌بینید، جاوااسکریپت درست کار می‌کند.</p>
+    
+    <div id="status"></div>
+    
+    <div style="margin-top: 30px;">
+        <a href="index.html" class="btn btn-primary" style="display: inline-block; padding: 10px 20px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+            ورود به وب‌اپلیکیشن
+        </a>
+    </div>
+
+    <script>
+        console.log('Test page loaded successfully');
+        const status = document.getElementById('status');
+        status.innerHTML = '<p class="success">✅ صفحه تست با موفقیت بارگذاری شد!</p>';
+        
+        setTimeout(() => {
+            status.innerHTML += '<p class="info">ℹ️ می‌توانید روی دکمه بالا کلیک کنید تا وارد وب‌اپلیکیشن اصلی شوید.</p>';
+        }, 1000);
+    </script>
+</body>
+</html>
